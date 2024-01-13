@@ -1,24 +1,27 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
-
 const NotesSchema = new Schema({
-   
+   // for connecting notes with user id
+    user:{
+     type:mongoose.Schema.Types.ObjectId,
+     ref: 'user'
+   },
     title:{
-    type:string
+    type:String
    },
 
    description:{
-    type: string,
+    type: String,
     required :true
    },
  
    tag:{  
-    type:string,
+    type:String,
     default : "General"
    },
 
    date:{
-    type:date,
+    type:Date,
     default: Date.now
    }
 });

@@ -59,7 +59,6 @@ user= await User.create({
 }
 });
 
-
 router.post('/login', [    
   // validating the name ,email and password.
     body('email', 'Enter a valid Email').isEmail(),

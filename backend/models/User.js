@@ -23,5 +23,6 @@ const UserSchema = new Schema({
    }
 
 });
-
-module.exports=mongoose.model('User',UserSchema)
+// for reference of foreign key .
+const User = mongoose.model('user',UserSchema)
+module.exports==User;

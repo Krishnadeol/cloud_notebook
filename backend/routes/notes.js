@@ -92,7 +92,4 @@ res.json(newNote);
     return res.json({ error: error.message });
   }
 });
-
-
-
 module.exports=router;

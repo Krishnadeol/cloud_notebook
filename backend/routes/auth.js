@@ -55,7 +55,7 @@ user= await User.create({
 
 } catch(error){
     console.error("something went wrong")
-    res.status(500).json({error:"some thing is wrong"})
+    res.status(500).json({error:error.message})
 }
 });
 
@@ -67,26 +67,28 @@ router.post('/login', [
   
     // CHECKING FOR INFORMATION ENTERED BY THE USER
     const errors = validationResult(req);
-
+    let success=false;
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({success, errors: errors.array() });
     }
    
     try{
-
+         
       //  destructuring of ther equest
       const {email,password}=req.body;
       
       let user=await User.findOne({email})
       if(!user){
-          return res.status(400).json({message:"Such user does not exists"});
+          return res.status(400).json({success,message:"Such user does not exists"});
       }
 
    
       const passCompare=await bcrypt.compare(password,user.password);
       if(!passCompare)
       {
-        res.status(400).json({error:"Please enter the correct credetials"});
+
+        res.status(400).json({success,error:"Please enter the correct credetials"});
+        
       }
       const data={
         user:{
@@ -95,11 +97,12 @@ router.post('/login', [
       }
     
       const token=jwt.sign(data,JWT_SECRET);
-      res.json({token})
+      success=true;
+      res.json({success,token})
       
     }catch(error){
       console.error("something went wrong")
-      res.status(500).json({error:"some thing is wrong"})
+      res.status(500).json({error:error.message})
     }
 
   })

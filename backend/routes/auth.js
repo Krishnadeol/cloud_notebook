@@ -9,7 +9,7 @@ var jwt = require('jsonwebtoken');
 const fetchUser = require('../middleware/fetchUser');
 const JWT_SECRET="alw@ys";
 
-
+////////////////////////////////////////////////////////////////////// for sign-up
 
 router.post('/', [    
 // validating the name ,email and password.
@@ -18,9 +18,9 @@ router.post('/', [
   body('password', 'Password must have at least 5 characters').isLength({ min: 5 }),
 ], async (req, res) => {
   const errors = validationResult(req);
-
+  let success=false;
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ success,errors: errors.array() });
   }
 // checking for non unique email.
 
@@ -28,7 +28,7 @@ try{
 let user=await User.findOne({email:req.body.email})
 
 if(user){
-    return res.status(400).json({message:"this user already exists"});
+    return res.status(400).json({success,message:"this user already exists"});
 }
 
 const myPass=req.body.password;
@@ -49,9 +49,9 @@ user= await User.create({
         id:user.id
     }
   }
-
+  success=true;
   const token=jwt.sign(data,JWT_SECRET);
-  res.json({token})
+  res.json({success,token})
 
 } catch(error){
     console.error("something went wrong")
@@ -59,6 +59,10 @@ user= await User.create({
 }
 });
 
+
+
+
+/////////////////////////////////////////////////////////////////////  for login 
 router.post('/login', [    
   // validating the name ,email and password.
     body('email', 'Enter a valid Email').isEmail(),
@@ -74,7 +78,7 @@ router.post('/login', [
    
     try{
          
-      //  destructuring of ther equest
+      //  destructuring of ther request
       const {email,password}=req.body;
       
       let user=await User.findOne({email})
